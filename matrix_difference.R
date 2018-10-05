@@ -19,37 +19,6 @@ all(rownames(cntrl)%in%annot$symbol)
 all(colnames(basal)%in%annot$symbol)
 all(colnames(cntrl)%in%annot$symbol)
 
-##not all annotated, let's remove those that aren't in the annotation
-basal = basal[-which(!(rownames(basal)%in%annot$symbol)),
-             -which(!(colnames(basal)%in%annot$symbol)),
-             ]
-
-cntrl = cntrl[-which(!(rownames(cntrl)%in%annot$symbol)),
-              -which(!(colnames(cntrl)%in%annot$symbol)),
-              ]
-
-#add lower matrix triangle
-
-#basal[lower.tri(basal)] <- basal[upper.tri(basal)]
-#cntrl[lower.tri(cntrl)] <- cntrl[upper.tri(cntrl)]
-
-basal = as.matrix(Matrix::forceSymmetric(as.matrix(basal), uplo = "U"))
-cntrl = as.matrix(Matrix::forceSymmetric(as.matrix(cntrl), uplo = "U"))
-
-#check for NA
-
-head(which(is.na(basal), arr.ind = TRUE))
-head(which(is.na(cntrl), arr.ind = TRUE))
-
-
-#convert NAs to zeros
-
-basal<-as.matrix(basal)
-basal[which(is.na(basal))]<-0
-
-cntrl<-as.matrix(cntrl)
-cntrl[which(is.na(cntrl))]<-0
-which(is.na(cntrl))
 #difference between basal and cntrl
 vs_basal_cntrl = basal - cntrl
 

@@ -109,14 +109,39 @@ p = ggplot(data = my_frame, mapping = aes(signFactor,
 )
 )
 p = p + geom_point()
-p = p + geom_text(check_overlap=TRUE, size = 5)
+p = p + geom_text(check_overlap=FALSE, size = 3,show.legend = FALSE)
 p = p + geom_hline(yintercept = 0) + geom_vline(xintercept = 0)
+p = p + labs(color='-chromosomal interaction')
+p = p + xlab("G/L Score") + ylab("log(G/L Ratio)")
 plot(p)
-ggsave(filename = "results/scatter_signchangefactors_basalVhealth.pdf", 
+ggsave(filename = "results/scatter_signchangefactors_basalVhealth2.pdf", 
        height = 8.5, 
        width = 14, 
        units = "in")
 
+##or to remove duplicated inters 
+my_frame_ex = 
+  my_frame%>%mutate(cromo_i  = factor(cromo_i, levels = c(1:22, "X"), ordered = TRUE),
+                    cromo_j  = factor(cromo_j, levels = c(1:22, "X"), ordered = TRUE))
+
+my_frame_ex =
+  my_frame_ex%>%filter(!(intra.inter == "inter" & cromo_i > cromo_j))
+p = ggplot(data = my_frame_ex, mapping = aes(signFactor, 
+                                             log(changeFactor), 
+                                             colour = factor(intra.inter),
+                                             label  = paste0(cromo_i, ";", cromo_j)
+)
+)
+p = p + geom_point()
+p = p + geom_text(check_overlap=FALSE, size = 3,show.legend = FALSE)
+p = p + geom_hline(yintercept = 0) + geom_vline(xintercept = 0)
+p = p + labs(color='-chromosomal interaction') 
+p = p + xlab("G/L Score") + ylab("log(G/L Ratio)")
+plot(p)
+ggsave(filename = "results/scatter_signchangefactors_basalVhealth2.pdf", 
+       height = 8.5, 
+       width = 14, 
+       units = "in")
 
 # for(i in cromos){
 #   chromo_row = sort(filter(.data = annot2, Chr == i)$symbol)

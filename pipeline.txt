@@ -1,0 +1,16 @@
+#1) MI inference 
+#2) MI value differences 
+##heatmaps
+##summary stats 
+##clustering
+##rank distance
+
+#3) Distribution comparison
+##3.1) desnity function adjustment
+##3.2) Statistical tests: KS, KLD, KW
+
+#4) Phenotypical organization 
+
+##5.1) InterChrom vs IntraChrom distros
+
+#5.2) By chromosome 

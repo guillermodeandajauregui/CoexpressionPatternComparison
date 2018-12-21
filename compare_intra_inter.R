@@ -15,6 +15,8 @@ annot = readRDS(file = "data/gene_annotation.RDS")
 cromos = c(1:22, "X") #define chromosomes, skip chromosome Y 
 names(cromos) = cromos
 
+#sort genes by chromosome, then alphabetically 
+annot2 = arrange(annot, Chr)
 
 
 #compare cases
@@ -157,19 +159,39 @@ max(ks_basal_ij$ks.d)
 min(ks_basal_ij$ks.d)
 
 
-p = ggplot(data = ks_basal_ij, mapping = aes(i,j, fill=-log(ks.d)))
+p1 = ggplot(data = ks_basal_ij, mapping = aes(i,j, fill=-log(ks.d)))
 #p = ggplot(data = ks_basal_ij, mapping = aes(i,j, fill=(ks.d)))
-p = p + geom_raster()
-p = p + scale_fill_gradient(low = "white", high = "steelblue", limits = c(0,7))
-p = p + ggtitle(label = "basal")
-p
+p1 = p1 + geom_raster()
+#p1 = p1 + scale_fill_gradient(low = "white", high = "steelblue", limits = c(0,7))
+#p1 = p1 + scale_fill_distiller(palette = "Purples", direction = 1, limits = c(0,10))
+#p1 = p1 + scale_fill_distiller(palette = "Spectral", direction = -1, limits = c(0,10))
+#p1 = p1 + scale_fill_distiller(palette = "Spectral", direction = -1, limits = c(1,7))
+p1 = p1 + scale_fill_distiller(palette = "RdYlBu", direction = -1, limits = c(1,7))
+p1 = p1 + ggtitle(label = "Basal Breast Cancer")
+p1 = p1 + ylab(label = "chromosome l") + xlab(label = "chromosome k")
+p1
 
 
-p = ggplot(data = ks_cntrl_ij, mapping = aes(i,j, fill=-log(ks.d)))
-p = p + geom_raster()
-p = p + scale_fill_gradient(low = "white", high = "steelblue", limits = c(0,7))
-p = p + ggtitle(label = "cntrl")
-p
+p2 = ggplot(data = ks_cntrl_ij, mapping = aes(i,j, fill=-log(ks.d)))
+p2 = p2 + geom_raster()
+#p2 = p2 + scale_fill_gradient(low = "white", high = "steelblue", limits = c(0,7))
+#p2 = p2 + scale_fill_distiller(palette = "Purples", direction = 1, limits = c(0,10))
+#p2 = p2 + scale_fill_distiller(palette = "Spectral", direction = -1, limits = c(0,10))
+#p2 = p2 + scale_fill_distiller(palette = "Spectral", direction = -1, limits = c(1,7))
+p2 = p2 + scale_fill_distiller(palette = "RdYlBu", direction = -1, limits = c(1,7))
+#p2 = p2 + ggtitle(label = "control")
+p2 = p2 + ggtitle(label = "Healthy Breast Tissue")
+p2 = p2 + ylab(label = "chromosome l") + xlab(label = "chromosome k")
+p2
+
+pdf(file = "results/Figure03.pdf", 
+    width = 15,
+    height = 7 
+    #paper = "US"
+    
+    )
+cowplot::plot_grid(p1, p2, align = "v", labels = "AUTO")
+dev.off()
 
 filter(ks_cntrl_ij, i=="20")
 
